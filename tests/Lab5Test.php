@@ -1,10 +1,8 @@
 <?php
 
-require 'vendor\autoload.php';
 
 use Facebook\WebDriver\Chrome\ChromeDriver;
 use Facebook\WebDriver\Exception\UnknownErrorException;
-use Facebook\WebDriver\Remote\DesiredCapabilities;
 use Facebook\WebDriver\WebDriverBy;
 use PHPUnit\Framework\TestCase;
 
@@ -12,10 +10,6 @@ class Lab5Test extends TestCase
 {
     protected ChromeDriver $driver;
 
-    public function build_chrome_capabilities(): DesiredCapabilities
-    {
-        return DesiredCapabilities::chrome();
-    }
 
     public function setUp(): void
     {
@@ -28,118 +22,101 @@ class Lab5Test extends TestCase
         $this->driver->quit();
     }
 
-    //with sleep
     /**
      * @throws UnknownErrorException
      */
     public function login()
     {
-        $this->driver->get("https://shikimori.one/");
+        $this->driver->get("https://mail.yandex.ru/");
         $this->driver->manage()->window()->maximize();
-        $element = $this->driver->findElement(WebDriverBy::cssSelector('a.menu-icon.sign_in'));
+        $signInToMail = '#root > div > div.PSHeader.PSHeader_theme_light.PSHeader_noCenter.Header_2LmwLn89QheMR2KyKhEGlR.PSHeader_LW3jBtGE8p_8DMgGbrX_v > div.PSHeader-Right > button'; //войти в почту
+        $element = $this->driver->findElement(WebDriverBy::cssSelector("$signInToMail"));
         if ($element) {
             $element->click();
-//            sleep(2);
+            sleep(1);
         }
-        $element = $this->driver->findElement(WebDriverBy::cssSelector('a.b-oauth_token.b-tooltipped.vkontakte'));
+        $inputLogin = '#passp-field-login'; // поле "Логин или email"
+        $element = $this->driver->findElement(WebDriverBy::cssSelector("$inputLogin"));
+        if ($element) {
+            $element->sendKeys("pashgunn13");
+            sleep(1);
+        }
+        $buttonLogin = '#passp\:sign-in'; // кнопка Войти
+        $element = $this->driver->findElement(WebDriverBy::cssSelector("$buttonLogin"));
         if ($element) {
             $element->click();
-//            sleep(2);
+            sleep(1);
         }
-        $element = $this->driver->findElement(WebDriverBy::cssSelector('input:nth-child(7)'));
+        $inputPassword = '#passp-field-passwd';
+        $element = $this->driver->findElement(WebDriverBy::cssSelector("$inputPassword"));
         if ($element) {
-            $element->sendKeys("79646397009");
-//            sleep(1);
+            $element->sendKeys("p3L-Twg-3C5-FJB");
+            sleep(1);
         }
-        $element = $this->driver->findElement(WebDriverBy::cssSelector('input:nth-child(9)'));
-        if ($element) {
-            $element->sendKeys("E2my-0ziy");
-//            sleep(20);
-        }
-        $element = $this->driver->findElement(WebDriverBy::id('install_allow'));
+        $element = $this->driver->findElement(WebDriverBy::cssSelector("$buttonLogin"));
         if ($element) {
             $element->click();
-            sleep(20);
+            sleep(1);
         }
-    }
-
-
-    //without sleep
-    /**
-     * @throws UnknownErrorException
-     */
-    /*public function login()
-    {
-        $this->driver->get("https://shikimori.one/");
-        $this->driver->manage()->window()->maximize();
-        $element = $this->driver->findElement(WebDriverBy::cssSelector('a.menu-icon.sign_in'));
-        if ($element) {
-            $element->click();
-            //sleep(1);
-        }
-        $element = $this->driver->findElement(WebDriverBy::cssSelector('a.b-oauth_token.b-tooltipped.vkontakte'));
-        if ($element) {
-            $element->click();
-            //sleep(1);
-        }
-        $element = $this->driver->findElement(WebDriverBy::cssSelector('input:nth-child(7)'));
-        if ($element) {
-            $element->sendKeys("79646397009");
-            //sleep(1);
-        }
-        $element = $this->driver->findElement(WebDriverBy::cssSelector('input:nth-child(9)'));
-        if ($element) {
-            $element->sendKeys("E2my-0ziy");
-            //sleep(1);
-        }
-        $element = $this->driver->findElement(WebDriverBy::id('install_allow'));
-        if ($element) {
-            $element->click();
-            //sleep(1);
-        }
-    }*/
-
-    /**
-     * @throws UnknownErrorException
-     */
-    public function testLogging()
-    {
-        $this->login();
-        $element = $this->driver->findElement(WebDriverBy::className("nickname"));
-        $this->assertEquals('pashgunn', $element->getText());
+        sleep(15);
     }
 
     /**
      * @throws UnknownErrorException
      */
-    /*public function testSearch()
+/*    public function testLogging()
     {
-        $finder = "#dashboards_show > header > div.global-search > label > input";
-        $naruto = "#dashboards_show > header > div.global-search > div > div > a:nth-child(1) > div.info > div.name > span";
-        $name = "#animes_show > section > div:nth-child(1) > header > h1";
-
         $this->login();
-
-        $element = $this->driver->findElement(WebDriverBy::cssSelector("$finder"));
-        if($element) {
-            $element->sendKeys("Наруто");
-            sleep(2);
-        }
-
-        $element = $this->driver->findElement(WebDriverBy::cssSelector("$naruto"));
-        if($element) {
-            $element->click();
-            sleep(2);
-        }
-
-        $element = $this->driver->findElement(WebDriverBy::cssSelector("$name"));
-        $this->assertEquals("Наруто / Naruto", $element->getText());
+        sleep(5);
+        $element = $this->driver->findElement(WebDriverBy::className('user-account__name'));
+        $this->assertEquals('pashgunn13', $element->getText());
+        sleep(5);
     }*/
 
     /**
      * @throws UnknownErrorException
      */
-    public function testComment()
+    public function testSearch()
+    {
+        $this->login();
+        $element = $this->driver->findElement(WebDriverBy::cssSelector('#js-apps-container > div.ns-view-app.ns-view-id-65.mail-App.js-mail-App > div.mail-App-Content.js-mail-app-content > div > div.mail-Layout-Container > div > nav > div.ns-view-compose-buttons-box.ns-view-id-78 > div > div > div > a > span.ComposeButton-m__btnText--ZnUxS.ComposeButton-m__btnTextWithIcon--7mOA1'));
+        $coordinates = $element->getCoordinates();
+        $this->driver->getMouse()->mouseMove($coordinates,0,0)->click();
+        sleep(5);
+//        if($element) {
+//            $element->sendKeys('w');
+//            $element->getCoordinates();
+//            $element->
+//            sleep(2);
+//        }
+
+        $element = $this->driver->findElement(WebDriverBy::cssSelector("#compose-field-1"));
+        if($element) {
+            $element->click();
+            sleep(2);
+        }
+
+        $element = $this->driver->findElement(WebDriverBy::cssSelector("body > div.Popup2.Popup2_visible.Popup2_target_anchor.Popup2_view_default.ComposeContactsSuggestDesktop.Theme.Theme_root_ps-light.Theme_color_ps-light > div > div.ComposeContactsList.ComposeContactsSuggestDesktop-List > div"));
+        if($element) {
+            $element->click();
+            sleep(2);
+        }
+
+        $element = $this->driver->findElement(WebDriverBy::cssSelector("#js-apps-container > div.ns-view-app.ns-view-id-35.mail-App.js-mail-App > div.ns-view-compose-manager-container-box.ns-view-id-55.mail-ComposeManagerContainer_box > div > div > div:nth-child(5) > div > div > div > div.composeReact.ComposeManager-PopupCompose > div > div.composeReact__footer > div > div:nth-child(1) > div.new__root--3qgLa.qa-Compose-ControlPanelButton.ComposeControlPanel-Button.ComposeControlPanel-Button_new.ComposeControlPanel-SendButton.qa-Compose-SendButton.ComposeSendButton.ComposeSendButton_desktop > button"));
+        if($element) {
+            $element->click();
+            sleep(2);
+        }
+
+        $element = $this->driver->findElement(WebDriverBy::className('ComposeDoneScreen-Title'));
+        $this->assertEquals('Письмо отправлено', $element->getText());
+        sleep(5);
+    }
+
+    /**
+     * @throws UnknownErrorException
+     */
+    /*public function testComment()
     {
         $menu = "#dashboards_show > header > div.menu-dropdown.profile > span > a";
         $viewed = "#profiles_show > section > div:nth-child(1) > div.profile-head > div.c-info > div > div.b-stats_bar.anime > div.stat_names > div:nth-child(3) > a";
@@ -176,7 +153,7 @@ class Lab5Test extends TestCase
         if ($element) {
             $this->assertTrue((bool)$element->getText());
         }
-    }
+    }*/
 
 
 }
