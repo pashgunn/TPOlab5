@@ -38,7 +38,7 @@ class Lab5Test extends TestCase
         $inputLogin = '#passp-field-login'; // поле "Логин или email"
         $element = $this->driver->findElement(WebDriverBy::cssSelector("$inputLogin"));
         if ($element) {
-            $element->sendKeys("pashgunn13");
+            $element->sendKeys("login");
             sleep(1);
         }
         $buttonLogin = '#passp\:sign-in'; // кнопка Войти
@@ -50,7 +50,7 @@ class Lab5Test extends TestCase
         $inputPassword = '#passp-field-passwd';
         $element = $this->driver->findElement(WebDriverBy::cssSelector("$inputPassword"));
         if ($element) {
-            $element->sendKeys("p3L-Twg-3C5-FJB");
+            $element->sendKeys("password");
             sleep(1);
         }
         $element = $this->driver->findElement(WebDriverBy::cssSelector("$buttonLogin"));
