@@ -48,12 +48,12 @@ class Lab5Test extends TestCase
         }
         $element = $this->driver->findElement(WebDriverBy::cssSelector('input:nth-child(7)'));
         if ($element) {
-            $element->sendKeys("79646397009");
+            $element->sendKeys("phone_number");
 //            sleep(1);
         }
         $element = $this->driver->findElement(WebDriverBy::cssSelector('input:nth-child(9)'));
         if ($element) {
-            $element->sendKeys("E2my-0ziy");
+            $element->sendKeys("password");
 //            sleep(20);
         }
         $element = $this->driver->findElement(WebDriverBy::id('install_allow'));
